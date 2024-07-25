@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page de Travail</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #ff6f00, #ff8f00, #4a00e0);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+            overflow: hidden;
+        }
+        .container {
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 1200px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+        header {
+            background: #4a00e0;
+            color: white;
+            padding: 1rem 2rem;
+            text-align: center;
+            position: relative;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            margin-bottom: 1rem;
+        }
+        .menu-button {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #ff8f00;
+            border: none;
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .menu-button:hover {
+            background: #ff6f00;
+        }
+        .collapsible {
+            background: #ffffff;
+            border: 1px solid #e0e4e8;
+            border-radius: 15px;
+            margin-bottom: 1rem;
+            padding: 1.5rem;
+            transition: max-height 0.4s ease, opacity 0.4s ease;
+            overflow: hidden;
+        }
+        .collapsible-header {
+            cursor: pointer;
+            font-weight: bold;
+            background: #4a00e0;
+            color: white;
+            padding: 0.75rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: background 0.3s ease;
+        }
+        .collapsible-header:hover {
+            background: #3d0a77;
+        }
+        .collapsible-content {
+            display: none;
+            max-height: 500px;
+            padding: 1rem;
+            background: #f8f9fa;
+            overflow-y: auto;
+            opacity: 0;
+        }
+        .collapsible.open .collapsible-content {
+            display: block;
+            opacity: 1;
+        }
+        .upload-container, .media-upload-container, .message-vocal-container {
+            margin-bottom: 1rem;
+        }
+        .upload-button, .media-upload-button, .message-vocal-button {
+            background: #4a00e0;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            transition: background 0.3s ease;
+        }
+        .upload-button:hover, .media-upload-button:hover, .message-vocal-button:hover {
+            background: #3d0a77;
+        }
+        .form-container label {
+            font-weight: bold;
+        }
+        .form-container input[type="file"] {
+            margin: 1rem 0;
+        }
+        .questions-container {
+            margin-top: 1rem;
+        }
+        .question {
+            background: #f1f5f9;
+            border-radius: 15px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            position: relative;
+            transition: background 0.3s ease;
+        }
+        .question:hover {
+            background: #e0e4e8;
+        }
+        .question-header {
+            font-weight: bold;
+            cursor: pointer;
+            color: #4a00e0;
+        }
+        .question-content {
+            display: none;
+            padding-top: 0.5rem;
+        }
+        .question.open .question-content {
+            display: block;
+        }
+        .question-button {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #ff8f00;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .question-button:hover {
+            background: #ff6f00;
+        }
+        .week-plan {
+            margin: 1rem 0;
+            background: #e9ecef;
+            border-radius: 15px;
+            padding: 1.5rem;
+        }
+        .week-plan-day {
+            margin-bottom: 1rem;
+        }
+        .day-header {
+            font-weight: bold;
+            background: #4a00e0;
+            color: white;
+            padding: 0.5rem;
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+        }
+        .day-content {
+            background: #ffffff;
+            border: 1px solid #e0e4e8;
+            border-radius: 10px;
+            padding: 1rem;
+            min-height: 50px;
+        }
+        .day-content textarea {
+            width: 100%;
+            height: 100px;
+            border: none;
+            border-radius: 10px;
+            padding: 0.5rem;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Page de Travail</h1>
+            <button onclick="goToMenu()" class="menu-button">Retour au Menu</button>
+        </header>
+        
+        <div class="collapsible" id="homeworkSection">
+            <div class="collapsible-header" onclick="toggleCollapsible('homeworkSection')">Devoirs de la Semaine</div>
+            <div class="collapsible-content">
+                <div class="week-plan" id="weekPlan">
+                    <!-- Les jours de la semaine sauf dimanche -->
+                    <div class="week-plan-day" id="monday">
+                        <div class="day-header">Lundi</div>
+                        <div class="day-content">
+                            <textarea placeholder="Écrivez les devoirs pour ce jour..."></textarea>
+                        </div>
+                    </div>
+                    <div class="week-plan-day" id="tuesday">
+                        <div class="day-header">Mardi</div>
+                        <div class="day-content">
+                            <textarea placeholder="Écrivez les devoirs pour ce jour..."></textarea>
+                        </div>
+                    </div>
+                    <div class="week-plan-day" id="wednesday">
+                        <div class="day-header">Mercredi</div>
+                        <div class="day-content">
+                            <textarea placeholder="Écrivez les devoirs pour ce jour..."></textarea>
+                        </div>
+                    </div>
+                    <div class="week-plan-day" id="thursday">
+                        <div class="day-header">Jeudi</div>
+                        <div class="day-content">
+                            <textarea placeholder="Écrivez les devoirs pour ce jour..."></textarea>
+                        </div>
+                    </div>
+                    <div class="week-plan-day" id="friday">
+                        <div class="day-header">Vendredi</div>
+                        <div class="day-content">
+                            <textarea placeholder="Écrivez les devoirs pour ce jour..."></textarea>
+                        </div>
+                    </div>
+                    <div class="week-plan-day" id="saturday">
+                        <div class="day-header">Samedi</div>
+                        <div class="day-content">
+                            <textarea placeholder="Écrivez les devoirs pour ce jour..."></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="message-vocal-container">
+            <button class="message-vocal-button" onclick="recordVoice()">Enregistrer Message Vocal</button>
+        </div>
+        
+        <div class="media-upload-container">
+            <button class="media-upload-button" onclick="uploadMedia()">Ajouter Photo/Vidéo</button>
+            <input type="file" id="mediaFile" accept="image/*,video/*">
+        </div>
+        
+        <div class="questions-container">
+            <div class="question" id="question1">
+                <div class="question-header" onclick="toggleQuestion('question1')">Question 1</div>
+                <div class="question-content">
+                    <textarea placeholder="Écrivez votre réponse ici..."></textarea>
+                </div>
+                <button class="question-button">Soumettre</button>
+            </div>
+            <div class="question" id="question2">
+                <div class="question-header" onclick="toggleQuestion('question2')">Question 2</div>
+                <div class="question-content">
+                    <textarea placeholder="Écrivez votre réponse ici..."></textarea>
+                </div>
+                <button class="question-button">Soumettre</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function toggleCollapsible(id) {
+            const element = document.getElementById(id);
+            if (element.classList.contains('open')) {
+                element.classList.remove('open');
+            } else {
+                element.classList.add('open');
+            }
+        }
+        
+        function toggleQuestion(id) {
+            const element = document.getElementById(id);
+            if (element.classList.contains('open')) {
+                element.classList.remove('open');
+            } else {
+                element.classList.add('open');
+            }
+        }
+        
+        function goToMenu() {
+            window.location.href = 'menu.html';
+        }
+        
+        function recordVoice() {
+            alert('Fonction d\'enregistrement vocal non implémentée.');
+        }
+        
+        function uploadMedia() {
+            document.getElementById('mediaFile').click();
+        }
+    </script>
+</body>
+</html>

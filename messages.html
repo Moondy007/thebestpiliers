@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messages</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #89cff0, #dda0dd);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #444;
+        }
+        .container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            height: 95%;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        header {
+            background: linear-gradient(135deg, #ff4d4d, #ffd700);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            position: relative;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+        }
+        .menu-button {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #b8860b;
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .menu-button:hover {
+            background: #daa520;
+        }
+        .message-container {
+            flex-grow: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            background: #e6e6e6;
+        }
+        .message-input-container {
+            display: flex;
+            padding: 1rem;
+            background: #f0f4f8;
+            border-top: 1px solid #dee2e6;
+            position: relative;
+        }
+        .message-input {
+            flex-grow: 1;
+            border: 1px solid #ced4da;
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            resize: none;
+            margin-right: 0.5rem;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+        .message-input:focus {
+            background-color: #fff7f0;
+        }
+        .send-button, .audio-button {
+            background: #ff4d4d;
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-left: 0.5rem;
+            transition: background-color 0.3s;
+        }
+        .send-button:hover, .audio-button:hover {
+            background: #c11b17;
+        }
+        .message {
+            background: white;
+            border-radius: 15px;
+            padding: 0.5rem 1rem;
+            margin-bottom: 1rem;
+            max-width: 80%;
+            word-wrap: break-word;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .message.sent {
+            align-self: flex-end;
+            background: #ff4d4d;
+            color: white;
+        }
+        .message.received {
+            align-self: flex-start;
+            background: #b0e0e6;
+        }
+        .audio-message {
+            display: flex;
+            align-items: center;
+        }
+        .audio-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #ff4d4d;
+            color: white;
+            font-size: 1.5rem;
+        }
+        .audio-button:hover {
+            background: #c11b17;
+        }
+        .recording {
+            background: #f0f4f8;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Messages</h1>
+            <button onclick="goToMenu()" class="menu-button">Retour au Menu</button>
+        </header>
+        
+        <div id="messageContainer" class="message-container"></div>
+        
+        <div id="recordingStatus" class="recording" style="display:none;">
+            Enregistrement... <button onclick="stopRecording()">Arrêter</button>
+        </div>
+        
+        <div class="message-input-container">
+            <textarea id="messageInput" class="message-input" placeholder="Écrire un message..."></textarea>
+            <button onclick="sendMessage()" class="send-button">Envoyer</button>
+            <button onclick="startRecording()" class="audio-button">🎤</button>
+        </div>
+    </div>
+
+    <script>
+        const messageContainer = document.getElementById('messageContainer');
+        const recordingStatus = document.getElementById('recordingStatus');
+
+        let mediaRecorder;
+        let audioChunks = [];
+
+        function goToMenu() {
+            window.location.href = 'menu.html';
+        }
+
+        function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+
+            if (messageInput.value.trim() !== '') {
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('message', 'sent');
+                messageElement.textContent = messageInput.value;
+                messageContainer.appendChild(messageElement);
+                messageInput.value = '';
+                messageContainer.scrollTop = messageContainer.scrollHeight;
+            }
+        }
+
+        async function startRecording() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                
+                mediaRecorder.ondataavailable = event => {
+                    audioChunks.push(event.data);
+                };
+
+                mediaRecorder.onstop = () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                    const audioURL = URL.createObjectURL(audioBlob);
+                    addAudioMessage(audioURL);
+                    audioChunks = [];
+                };
+
+                mediaRecorder.start();
+                recordingStatus.style.display = 'block';
+            } catch (error) {
+                console.error('Erreur lors de l\'accès au microphone :', error);
+            }
+        }
+
+        function stopRecording() {
+            if (mediaRecorder) {
+                mediaRecorder.stop();
+                recordingStatus.style.display = 'none';
+            }
+        }
+
+        function addAudioMessage(audioURL) {
+            const audioElement = document.createElement('audio');
+            audioElement.controls = true;
+            audioElement.src = audioURL;
+
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', 'sent', 'audio-message');
+            messageElement.appendChild(audioElement);
+
+            messageContainer.appendChild(messageElement);
+            messageContainer.scrollTop = messageContainer.scrollHeight;
+        }
+
+        // Exemple pour démonstration (à retirer en production)
+        function addReceivedMessage(text) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', 'received');
+            messageElement.textContent = text;
+            messageContainer.appendChild(messageElement);
+            messageContainer.scrollTop = messageContainer.scrollHeight;
+        }
+
+        // Ajout d'un message reçu pour démonstration (à retirer en production)
+        addReceivedMessage('Bonjour, comment ça va ?');
+        addReceivedMessage('Ceci est un message reçu pour la démonstration.');
+    </script>
+</body>
+</html>

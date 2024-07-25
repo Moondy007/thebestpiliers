@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page d'Accueil</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(to right, #4a90e2, #50e3c2);
+            color: #fff;
+            overflow: hidden;
+        }
+        .container {
+            width: 100%;
+            max-width: 400px;
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+        .header {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group input {
+            width: calc(100% - 22px);
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+        .form-group button {
+            width: calc(100% - 22px);
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            background: #4a90e2;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+        }
+        .form-group button:hover {
+            background: #357ABD;
+            transform: scale(1.05);
+        }
+        .welcome-message {
+            display: none;
+            font-size: 18px;
+            color: #4a90e2;
+            margin-top: 20px;
+        }
+        .menu-view {
+            display: none;
+            background: #f4f5f7;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            text-align: center;
+        }
+        .menu-view .header {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .menu-view .link-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .menu-view .link-item {
+            background: #4a90e2;
+            color: #fff;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            text-decoration: none;
+            display: block;
+            font-size: 18px;
+            transition: background 0.3s, transform 0.3s;
+        }
+        .menu-view .link-item:hover {
+            background: #357ABD;
+            transform: scale(1.05);
+        }
+        .menu-view .logout-btn {
+            background: #e74c3c;
+            padding: 15px;
+            font-size: 18px;
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+        }
+        .menu-view .logout-btn:hover {
+            background: #c0392b;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <!-- Vue d'accueil -->
+    <div id="entryView" class="container">
+        <div class="header">Accès au Site</div>
+        <div class="form-group">
+            <input type="text" id="entryCode" placeholder="Entrez le code d'accès" />
+        </div>
+        <div class="form-group">
+            <button onclick="validateCode()">Accéder</button>
+        </div>
+        <div id="welcomeMessage" class="welcome-message"></div>
+    </div>
+
+    <!-- Vue du menu principal -->
+    <div id="menuView" class="menu-view">
+        <div class="header">Menu Principal</div>
+        <ul class="link-list">
+            <li><a href="messages.html" class="link-item">Page de Discussion</a></li>
+            <li><a href="work.html" class="link-item">Page de Travail</a></li>
+            <li><a href="repertoire.html" class="link-item">Répertoire des Comptes</a></li>
+            <li><a href="album.html" class="link-item">Album de Fin d'Année</a></li>
+        </ul>
+        <button class="logout-btn" onclick="logout()">Déconnexion</button>
+    </div>
+
+    <script>
+        // Définir les comptes avec leurs détails
+        const accounts = {
+            '1789': { name: 'Pilier de la Flamme', color: '#FF5733', message: 'Bon retour, Maître de la Flamme !' },
+            '1803': { name: 'Pilier du Vent', color: '#D4A5A5', message: 'Bon retour, Maître du Vent !' },
+            '1492': { name: 'Pilier de l’Eau', color: '#3498DB', message: 'Bon retour, Maître de l’Eau !' },
+            '1945': { name: 'Pilier de la Foudre', color: '#F1C40F', message: 'Bon retour, Maître de la Foudre !' }
+        };
+
+        function validateCode() {
+            const codeInput = document.getElementById('entryCode').value.trim();
+            const account = accounts[codeInput];
+
+            if (account) {
+                document.body.style.background = account.color;
+                document.getElementById('entryView').style.display = 'none';
+                document.getElementById('menuView').style.display = 'block';
+                document.getElementById('welcomeMessage').textContent = account.message;
+                document.getElementById('welcomeMessage').style.display = 'block';
+            } else {
+                alert('Code incorrect. Veuillez réessayer.');
+            }
+        }
+
+        function logout() {
+            document.getElementById('menuView').style.display = 'none';
+            document.getElementById('entryView').style.display = 'block';
+            document.getElementById('entryCode').value = '';
+            document.getElementById('welcomeMessage').style.display = 'none';
+            document.body.style.background = 'linear-gradient(to right, #4a90e2, #50e3c2)';
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

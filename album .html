@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page de Travail</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f7f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 1200px;
+            height: 90%;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            background: #007bff;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            position: relative;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+        }
+        .menu-button {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #0069d9;
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .menu-button:hover {
+            background: #0056b3;
+        }
+        .collapsible {
+            background: #ffffff;
+            border: 1px solid #ced4da;
+            border-radius: 10px;
+            margin: 1rem;
+            padding: 1rem;
+            transition: max-height 0.3s ease;
+            overflow: hidden;
+            position: relative;
+        }
+        .collapsible-header {
+            cursor: pointer;
+            font-weight: bold;
+            background: #007bff;
+            color: white;
+            padding: 0.5rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .collapsible-content {
+            display: none;
+            max-height: 500px;
+            padding: 1rem;
+            background: #f8f9fa;
+            overflow-y: auto;
+        }
+        .collapsible.open .collapsible-content {
+            display: block;
+        }
+        .collapsible-button {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .collapsible-button:hover {
+            background: #0056b3;
+        }
+        .upload-container {
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+        }
+        .upload-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+        .upload-button:hover {
+            background: #0056b3;
+        }
+        .questions-container {
+            padding: 1rem;
+        }
+        .question {
+            background: #e9ecef;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+        .question-header {
+            font-weight: bold;
+            cursor: pointer;
+            color: #007bff;
+        }
+        .question-content {
+            display: none;
+            padding-top: 0.5rem;
+        }
+        .question.open .question-content {
+            display: block;
+        }
+        .question-button {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .question-button:hover {
+            background: #0056b3;
+        }
+        .form-container {
+            padding: 1rem;
+        }
+        .form-container label {
+            font-weight: bold;
+        }
+        .form-container input[type="file"] {
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Page de Travail</h1>
+            <button onclick="goToMenu()" class="menu-button">Retour au Menu</button>
+        </header>
+        
+        <div class="collapsible" id="homeworkSection">
+            <div class="collapsible-header" onclick="toggleCollapsible('homeworkSection')">Devoirs de la Semaine</div>
+            <div class="collapsible-content">
+                <div class="upload-container">
+                    <button class="upload-button" onclick="uploadHomework()">Ajouter Devoir</button>
+                </div>
+                <div class="form-container">
+                    <label for="homeworkFile">Choisir un fichier :</label>
+                    <input type="file" id="homeworkFile">
+                </div>
+            </div>
+        </div>
+        
+        <div class="questions-container">
+            <div class="question" id="question1">
+                <div class="question-header" onclick="toggleQuestion('question1')">Question 1: Exemple</div>
+                <div class="question-content">Contenu de la question 1...</div>
+                <button class="question-button" onclick="addQuestion()">Ajouter une Question</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function goToMenu() {
+            window.location.href = 'menu.html';
+        }
+
+        function toggleCollapsible(id) {
+            const section = document.getElementById(id);
+            section.classList.toggle('open');
+        }
+
+        function uploadHomework() {
+            alert('Fonctionnalité de téléchargement de devoirs en cours de développement.');
+        }
+
+        function toggleQuestion(id) {
+            const question = document.getElementById(id);
+            question.classList.toggle('open');
+        }
+
+        function addQuestion() {
+            alert('Fonctionnalité d\'ajout de question en cours de développement.');
+        }
+    </script>
+</body>
+</html>
